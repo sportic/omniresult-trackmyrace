@@ -112,6 +112,7 @@ class ResultsPage extends AbstractParser
                 $this->parseResultName($cell, $parameters);
             }
         }
+        $parameters['id'] = isset($parameters['bib']) ? $parameters['bib'] : null;
         return $parameters;
     }
 

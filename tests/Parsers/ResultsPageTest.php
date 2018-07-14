@@ -33,7 +33,7 @@ class ResultsPageTest extends AbstractPageTest
                 'posCategory' => '8',
                 'gender' => 'male',
                 'posGender' => '24',
-                'id' => null,
+                'id' => '1363',
                 'parameters' => null,
                 'splits' => [],
                 'status' => null,
@@ -43,6 +43,7 @@ class ResultsPageTest extends AbstractPageTest
         );
     }
 
+    /** @noinspection PhpMethodNamingConventionInspection */
     public function testGenerateContentResultPagination()
     {
         self::assertEquals(
