@@ -1,15 +1,14 @@
 <?php
 
-namespace Sportic\Omniresult\RaceTec\Tests\Parsers;
+namespace Sportic\Omniresult\Trackmyrace\Tests\Parsers;
 
 use Sportic\Omniresult\Common\Models\Result;
-use Sportic\Omniresult\Common\Models\SplitCollection;
-use Sportic\Omniresult\RaceTec\Scrapers\ResultsPage as PageScraper;
-use Sportic\Omniresult\RaceTec\Parsers\ResultsPage as PageParser;
+use Sportic\Omniresult\Trackmyrace\Scrapers\ResultsPage as PageScraper;
+use Sportic\Omniresult\Trackmyrace\Parsers\ResultsPage as PageParser;
 
 /**
  * Class EventPageTest
- * @package Sportic\Omniresult\RaceTec\Tests\Scrapers
+ * @package Sportic\Omniresult\Trackmyrace\Tests\Scrapers
  */
 class ResultsPageTest extends AbstractPageTest
 {
@@ -21,23 +20,24 @@ class ResultsPageTest extends AbstractPageTest
 
     public function testGenerateContentResultList()
     {
-        self::assertCount(50, self::$parametersParsed['records']);
+        self::assertCount(20, self::$parametersParsed['records']);
         self::assertInstanceOf(Result::class, self::$parametersParsed['records'][5]);
         self::assertEquals(
             [
-                'posGen' => '6',
-                'bib' => '247',
-                'fullName' => 'Sorin Boriceanu',
-                'href' => 'MyResults.aspx?uid=16648-2091-1-29984',
-                'time' => '02:04:16',
-                'category' => 'Masculin 35-39',
-                'posCategory' => '3',
-                'gender' => 'Male',
-                'posGender' => '6',
-                'id' => '16648-2091-1-29984',
+                'posGen' => '26',
+                'bib' => '1363',
+                'fullName' => 'Daniel Tabirca',
+                'href' => null,
+                'time' => '04:12:31.8',
+                'category' => 'M40-49',
+                'posCategory' => '8',
+                'gender' => 'male',
+                'posGender' => '24',
+                'id' => null,
                 'parameters' => null,
-                'splits' => new SplitCollection(),
+                'splits' => [],
                 'status' => null,
+                'country' => 'Romania'
             ],
             self::$parametersParsed['records'][5]->__toArray()
         );
@@ -47,9 +47,9 @@ class ResultsPageTest extends AbstractPageTest
     {
         self::assertEquals(
             [
-                'current' => 1,
-                'all' => 5,
-                'items' => 222,
+                'current' => 2,
+                'all' => 8,
+                'items' => 151,
             ],
             self::$parametersParsed['pagination']
         );
@@ -65,7 +65,7 @@ class ResultsPageTest extends AbstractPageTest
      */
     protected static function getNewScraper()
     {
-        return new PageScraper('16648', '2091', '1');
+        return new PageScraper();
     }
 
     /**
@@ -81,7 +81,7 @@ class ResultsPageTest extends AbstractPageTest
      */
     protected static function getSerializedFile()
     {
-        return 'event_page.serialized';
+        return 'ResultsPage/event_page.serialized';
     }
 
     /**
@@ -89,6 +89,6 @@ class ResultsPageTest extends AbstractPageTest
      */
     protected static function getHtmlFile()
     {
-        return 'event_page.html';
+        return 'ResultsPage/event_page.html';
     }
 }

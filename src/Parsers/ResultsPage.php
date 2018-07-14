@@ -103,7 +103,7 @@ class ResultsPage extends AbstractParser
     protected function parseResultsRowCell(DOMElement $cell, $parameters = [])
     {
         $class = $cell->getAttribute('class');
-        $type = trim(str_replace(['first', 'last', 'odd'], '', $class));
+        $type = trim(str_replace(['first', 'last', 'odd', 'even'], '', $class));
         $field = array_search($type, self::getLabelMaps());
         if ($field) {
             $parameters[$field] = trim($cell->nodeValue);
@@ -174,7 +174,7 @@ class ResultsPage extends AbstractParser
 
             $lastURL = $paginationObject->filter('a.page-last')->getNode(0)->getAttribute('href');
             $lastPage = substr($lastURL, strpos($lastURL, '/expanded/page/') + 15, -1);
-            $return['all'] = $lastPage+1;
+            $return['all'] = $lastPage + 1;
         }
 
         $countElement = $this->getCrawler()->filter('#participantCount');
@@ -191,12 +191,12 @@ class ResultsPage extends AbstractParser
     public static function getLabelMaps()
     {
         return [
-            'pos_gen' => 'total_place',
+            'posGen' => 'total_place',
             'bib' => 'start_nr',
             'gender' => 'gender',
             'category' => 'agegroup',
-            'pos_category' => 'agegroup_place',
-            'pos_gender' => 'gender_place',
+            'posCategory' => 'agegroup_place',
+            'posGender' => 'gender_place',
             'club' => 'club',
             'time' => 'brutto',
         ];

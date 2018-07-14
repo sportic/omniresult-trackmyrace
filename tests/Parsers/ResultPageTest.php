@@ -1,16 +1,16 @@
 <?php
 
-namespace Sportic\Omniresult\RaceTec\Tests\Parsers;
+namespace Sportic\Omniresult\Trackmyrace\Tests\Parsers;
 
 use Sportic\Omniresult\Common\Content\ItemContent;
 use Sportic\Omniresult\Common\Models\Result;
 use Sportic\Omniresult\Common\Models\Split;
-use Sportic\Omniresult\RaceTec\Scrapers\ResultPage as PageScraper;
-use Sportic\Omniresult\RaceTec\Parsers\ResultPage as PageParser;
+use Sportic\Omniresult\Trackmyrace\Scrapers\ResultPage as PageScraper;
+use Sportic\Omniresult\Trackmyrace\Parsers\ResultPage as PageParser;
 
 /**
  * Class ResultPageTest
- * @package Sportic\Omniresult\RaceTec\Tests\Scrapers
+ * @package Sportic\Omniresult\Trackmyrace\Tests\Scrapers
  */
 class ResultPageTest extends AbstractPageTest
 {

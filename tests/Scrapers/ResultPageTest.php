@@ -1,14 +1,14 @@
 <?php
 
-namespace Sportic\Omniresult\RaceTec\Tests\Scrapers;
+namespace Sportic\Omniresult\Trackmyrace\Tests\Scrapers;
 
 use PHPUnit\Framework\TestCase;
-use Sportic\Omniresult\RaceTec\Scrapers\ResultPage;
+use Sportic\Omniresult\Trackmyrace\Scrapers\ResultPage;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class EventPageTest
- * @package Sportic\Omniresult\RaceTec\Tests\Scrapers
+ * @package Sportic\Omniresult\Trackmyrace\Tests\Scrapers
  */
 class ResultPageTest extends TestCase
 {
