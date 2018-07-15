@@ -21,178 +21,46 @@ class ResultPage extends AbstractParser
      */
     protected function generateContent()
     {
-        $this->returnContent['fullName'] = $this->parseFullName();
-        $this->returnContent['time'] = $this->parseFinishTime();
-        $this->parsePositions();
-        $this->parseResultBio();
-        $this->returnContent['splits'] = $this->parseSplits();
-
+        $this->parseContent();
         $params = ['record' => new Result($this->returnContent)];
         return $params;
     }
 
-    /**
-     * @return string
-     */
-    protected function parseFullName()
+    protected function parseContent()
     {
-        return trim(
-            $this->getCrawler()->filter('#ctl00_Content_Main_lblName')->text()
-        );
-    }
+        $itemBoxes = $this->getCrawler()->filter('.item');
 
-    /**
-     * @return string
-     */
-    protected function parseFinishTime()
-    {
-        return trim(
-            $this->getCrawler()->filter('#ctl00_Content_Main_lblResFinishTime')->text()
-        );
-    }
-
-    protected function parsePositions()
-    {
-        $posGenData = $this->getCrawler()->filter('#ctl00_Content_Main_lblResOPos')->text();
-        list($posGen, $participants) = explode('/', $posGenData);
-        $this->returnContent['posGen'] = trim($posGen);
-        $this->returnContent['participants']['race'] = trim($participants);
-
-        $posGenData = $this->getCrawler()->filter('#ctl00_Content_Main_lblResGPos')->text();
-        list($posGen, $participants) = explode('/', $posGenData);
-        $this->returnContent['posGender'] = trim($posGen);
-        $this->returnContent['participants']['gender'] = trim($participants);
-
-        $posGenData = $this->getCrawler()->filter('#ctl00_Content_Main_lblResCPos')->text();
-        list($posGen, $participants) = explode('/', $posGenData);
-        $this->returnContent['posCategory'] = trim($posGen);
-        $this->returnContent['participants']['category'] = trim($participants);
-    }
-
-    protected function parseResultBio()
-    {
-        $table = $this->getCrawler()->filter('#ctl00_Content_Main_grdBio');
-        $rows = $table->filter('tbody > tr');
-
-        foreach ($rows as $row) {
-            $values = [];
-            foreach ($row->childNodes as $childNode) {
-                $value = trim($childNode->nodeValue);
-                if (!empty($value)) {
-                    $values[] = $value;
-                }
-            }
-            $column = $values[0];
-            $value = $values[1];
-
-            switch ($column) {
-                case 'Race No':
-                    $this->returnContent['bib'] = $value;
-                    break;
-                case 'Gender':
-                    $this->returnContent['gender'] = ($value == 'Female' ? 'female' : 'male');
-                    break;
-                case 'Category':
-                    $this->returnContent['category'] = $value;
-                    break;
-                case 'Status':
-                    $this->returnContent['status'] = $value;
-                    break;
-            }
+        foreach ($itemBoxes as $itemBox) {
+            $this->parseItemBox($itemBox);
         }
     }
 
     /**
-     * @return SplitCollection
+     * @param DOMElement $itemBox
      */
-    protected function parseSplits()
+    protected function parseItemBox(DOMElement $itemBox)
     {
-        $return = new SplitCollection();
-        $headerData = [];
-        $splitRows = $this->getCrawler()->filter(
-            '#ctl00_Content_Main_grdSplits_DXMainTable > tbody > tr'
-        );
-        if ($splitRows->count() > 0) {
-            foreach ($splitRows as $resultRow) {
-                if ($resultRow->getAttribute('id') === 'ctl00_Content_Main_grdSplits_DXHeadersRow') {
-                    $headerData = $this->parseSplitsHeader($resultRow);
-                } else {
-                    $split = $this->parseSplitRow($resultRow, $headerData);
-                    if ($split) {
-                        $return[] = $split;
-                    }
-                }
-            }
+        $rows = $itemBox->getElementsByTagName('div');
+        $title = trim(str_replace([':'], '', $rows->item(0)->textContent));
+        $value = trim($rows->item(1)->textContent);
+
+        $field = $this->parseItemBoxTitle($title);
+
+        if ($field) {
+            $this->returnContent[$field] = $value;
         }
 
-        return $return;
     }
 
     /**
-     * @param DOMElement $row
-     *
-     * @return array
+     * @param $title
+     * @return false|int|string
      */
-    protected function parseSplitsHeader($row)
+    protected function parseItemBoxTitle($title)
     {
-        $return = [];
+        $search = array_search($title, self::getLabelMaps());
 
-        $fieldMap = self::getLabelMaps();
-        $colNum = 0;
-        foreach ($row->childNodes as $node) {
-            if ($node instanceof DOMElement) {
-                $fieldName = trim($node->nodeValue);
-                $labelFind = array_search($fieldName, $fieldMap);
-                if ($labelFind) {
-                    $return[$colNum] = $labelFind;
-                }
-                $colNum++;
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * @param $row
-     * @param $headerData
-     *
-     * @return Split|null
-     */
-    protected function parseSplitRow($row, $headerData)
-    {
-        $parameters = [];
-        $rowNum = 0;
-        foreach ($row->childNodes as $cell) {
-            if ($cell instanceof DOMElement) {
-                $parameters = $this->parseSplitCell($rowNum, $cell, $headerData, $parameters);
-                $rowNum++;
-            }
-        }
-        if (count($parameters)) {
-            return new Split($parameters);
-        }
-
-        return null;
-    }
-
-
-    /**
-     * @param $colCount
-     * @param $cell
-     * @param $headerData
-     * @param $parameters
-     *
-     * @return array
-     */
-    protected function parseSplitCell($colCount, $cell, $headerData, $parameters)
-    {
-        if (isset($headerData[$colCount])) {
-            $field = $headerData[$colCount];
-            $parameters[$field] = trim($cell->nodeValue);
-        }
-
-        return $parameters;
+        return $search;
     }
 
     /**
@@ -201,9 +69,14 @@ class ResultPage extends AbstractParser
     protected static function getLabelMaps()
     {
         return [
-            'name' => 'Split Name',
-            'timeFromStart' => 'Time',
-            'time' => 'Time From Previous Split',
+//            'name' => 'Event',
+            'fullName' => 'Name',
+            'bib' => 'Number',
+            'country' => 'Nationality',
+            'time' => 'Time',
+            'posGen' => 'Place',
+            'category' => 'Age group',
+            'posCategory' => 'Place in age group'
         ];
     }
 

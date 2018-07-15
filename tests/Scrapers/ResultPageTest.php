@@ -19,7 +19,7 @@ class ResultPageTest extends TestCase
         static::assertInstanceOf(Crawler::class, $crawler);
 
         static::assertSame(
-            'http://racetecresults.com/MyResults.aspx?uid=16648-2091-1-29925',
+            'https://www.trackmyrace.com/en/event-zone/ajax/event/cozia-mountain-run-6/individual/-bf626f0882/1281/',
             $crawler->getUri()
         );
     }
@@ -30,9 +30,10 @@ class ResultPageTest extends TestCase
 
         static::assertInstanceOf(Crawler::class, $crawler);
 
-        static::assertContains('Marius-Alexandru Dragu', $crawler->html());
-        static::assertContains('Masculin 45-49', $crawler->html());
-//        file_put_contents(TEST_FIXTURE_PATH . '/Parsers/result_page.html', $crawler->html());
+        $html =  $crawler->html();
+        static::assertContains('Cozia Mountain Run', $html);
+        static::assertContains('Florin Dragos Caprita', $html);
+//        file_put_contents(TEST_FIXTURE_PATH . '/Parsers/ResultPage/result_page.html', $crawler->html());
     }
 
     /**
@@ -40,7 +41,7 @@ class ResultPageTest extends TestCase
      */
     protected function getCrawler()
     {
-        $params = ['uid' => '16648-2091-1-29925'];
+        $params = ['id' => 'cozia-mountain-run-6/individual/-bf626f0882/1281/'];
         $scraper = new ResultPage();
         $scraper->initialize($params);
         return $scraper->getCrawler();
