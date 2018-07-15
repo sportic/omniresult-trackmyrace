@@ -33,7 +33,7 @@ class ResultsPageTest extends AbstractPageTest
                 'posCategory' => '8',
                 'gender' => 'male',
                 'posGender' => '24',
-                'id' => '1363',
+                'id' => 'cozia-mountain-run-6/individual/-bf626f0882/1363/',
                 'parameters' => null,
                 'splits' => [],
                 'status' => null,

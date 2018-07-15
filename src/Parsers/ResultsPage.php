@@ -87,6 +87,8 @@ class ResultsPage extends AbstractParser
                 $parameters = $this->parseResultsRowCell($cell, $parameters);
             }
         }
+        $parameters['id'] = $this->parseResultId($row);
+
         if (count($parameters)) {
             return new Result($parameters);
         }
@@ -112,8 +114,21 @@ class ResultsPage extends AbstractParser
                 $this->parseResultName($cell, $parameters);
             }
         }
-        $parameters['id'] = isset($parameters['bib']) ? $parameters['bib'] : null;
         return $parameters;
+    }
+
+    /**
+     * @param DOMElement $row
+     * @return string
+     */
+    protected function parseResultId(DOMElement $row)
+    {
+        $resultUrl = $row->getAttribute('rel');
+        $id = str_replace(
+            ['en/event-zone/ajax/event/'],
+            '',
+            $resultUrl);
+        return $id;
     }
 
     /**

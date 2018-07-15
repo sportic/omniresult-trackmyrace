@@ -3,7 +3,7 @@
 require '../vendor/autoload.php';
 
 $parameters = [
-    'uid' => '16648-172-1-63070',
+    'id' => 'cozia-mountain-run-6/individual/-bf626f0882/1363/',
 ];
 
 $client = new \Sportic\Omniresult\Trackmyrace\TrackmyraceClient();
