@@ -23,7 +23,7 @@ class EventPageTest extends AbstractPageTest
      */
     protected static function getNewScraper()
     {
-        return new EventPageScraper('16648', '2091', '1');
+        return new EventPageScraper();
     }
 
     /**

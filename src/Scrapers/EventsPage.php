@@ -31,9 +31,14 @@ class EventsPage extends AbstractScraper
      */
     public function getCrawlerUri()
     {
-        return $this->getCrawlerUriHost() . '/StartPage.aspx?'
-            . 'CId=' . $this->getCId()
-            . '&From=' . $this->getStartFrom();
+        $country = $this->getCountry();
+        $page = $this->getPage() - 1;
+
+        return $this->getCrawlerUriHost() . '/en'
+            . ($country ? '/' . $country : '')
+            . '/event-zone/ajax/event/list/expanded/coming/page'
+            . '/' . $page
+            . '/?';
     }
 
     /**
@@ -47,9 +52,9 @@ class EventsPage extends AbstractScraper
     /**
      * @return string
      */
-    protected function getCId()
+    protected function getCountry()
     {
-        return $this->getParameter('cId');
+        return $this->getParameter('country', false);
     }
 
     /**
@@ -58,22 +63,5 @@ class EventsPage extends AbstractScraper
     protected function getPage()
     {
         return $this->getParameter('page', 1);
-    }
-
-    /**
-     * @return float|int
-     */
-    protected function getStartFrom()
-    {
-        $page = $this->getPage();
-        return (($page - 1) * $this->getItemsPerPage()) + 1;
-    }
-
-    /**
-     * @return int
-     */
-    public function getItemsPerPage()
-    {
-        return 20;
     }
 }
