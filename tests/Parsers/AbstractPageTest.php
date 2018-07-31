@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Sportic\Omniresult\Common\Content\GenericContent;
 use Sportic\Omniresult\Common\Content\ListContent;
 use Sportic\Omniresult\Common\Content\RecordContent;
+use Sportic\Omniresult\Trackmyrace\Parsers\AbstractParser;
 use Sportic\Omniresult\Trackmyrace\Scrapers\AbstractScraper;
 use Sportic\Omniresult\Trackmyrace\Parsers\EventPage as EventPageParser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -19,60 +20,47 @@ abstract class AbstractPageTest extends TestCase
     protected static $parameters;
 
     /**
-     * @var EventPageParser
-     */
-    protected static $parser;
-
-    /**
      * @var GenericContent|ListContent|RecordContent
      */
     protected static $parametersParsed;
 
-    public static function setUpBeforeClass()
+    /**
+     * @param AbstractParser $parser
+     * @param AbstractScraper $scrapper
+     * @param $fixturePath
+     * @return mixed
+     */
+    public static function initParserFromFixtures($parser, $scrapper, $fixturePath)
     {
-        self::$parameters = unserialize(
-            file_get_contents(TEST_FIXTURE_PATH . DS . 'Parsers' . DS . static::getSerializedFile())
-        );
-
-        $scrapper = static::getNewScraper();
-
         $crawler = new Crawler(null, $scrapper->getCrawlerUri());
         $crawler->addContent(
             file_get_contents(
-                TEST_FIXTURE_PATH . DS . 'Parsers' . DS . static::getHtmlFile()
+                TEST_FIXTURE_PATH . DS . 'Parsers' . DS . $fixturePath . '.html'
             ),
             'text/html;charset=utf-8'
         );
 
-        self::$parser = static::getNewParser();
-        self::$parser->setScraper($scrapper);
-        self::$parser->setCrawler($crawler);
+        $parser->setScraper($scrapper);
+        $parser->setCrawler($crawler);
 
-        self::$parametersParsed = self::$parser->getContent();
+        $parametersParsed = $parser->getContent();
 
 //        file_put_contents(
-//            TEST_FIXTURE_PATH . DS . 'Parsers' . DS . static::getSerializedFile(),
-//            serialize(self::$parser->getContent()->all())
+//            TEST_FIXTURE_PATH . DS . 'Parsers' . DS . $fixturePath . '.serialized',
+//            serialize($parser->getContent()->all())
 //        );
+
+        return $parametersParsed;
     }
 
     /**
-     * @return string
+     * @param $fixturePath
+     * @return mixed
      */
-    abstract protected static function getSerializedFile();
-
-    /**
-     * @return string
-     */
-    abstract protected static function getHtmlFile();
-
-    /**
-     * @return AbstractScraper
-     */
-    abstract protected static function getNewScraper();
-
-    /**
-     * @return AbstractScraper
-     */
-    abstract protected static function getNewParser();
+    public static function getParametersFixtures($fixturePath)
+    {
+        return unserialize(
+            file_get_contents(TEST_FIXTURE_PATH . DS . 'Parsers' . DS . $fixturePath . '.serialized')
+        );
+    }
 }

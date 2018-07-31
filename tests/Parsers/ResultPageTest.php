@@ -14,7 +14,13 @@ class ResultPageTest extends AbstractPageTest
 {
     public function testGenerateResultsBox()
     {
-        $record = self::$parametersParsed->getRecord();
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'ResultPage\result_page'
+        );
+
+        $record = $parametersParsed->getRecord();
 
         self::assertInstanceOf(Result::class, $record);
         self::assertSame('Florin Dragos Caprita', $record->getFullName());

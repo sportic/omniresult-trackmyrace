@@ -20,8 +20,17 @@ class ResultsPageTest extends AbstractPageTest
 
     public function testGenerateContentResultList()
     {
-        self::assertCount(20, self::$parametersParsed['records']);
-        self::assertInstanceOf(Result::class, self::$parametersParsed['records'][5]);
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'ResultsPage\event_page'
+        );
+
+        /** @var array|Result[] $results */
+        $results = $parametersParsed['records'];
+
+        self::assertCount(20, $results);
+        self::assertInstanceOf(Result::class, $results[5]);
         self::assertEquals(
             [
                 'posGen' => '26',
@@ -39,57 +48,109 @@ class ResultsPageTest extends AbstractPageTest
                 'status' => null,
                 'country' => 'Romania'
             ],
-            self::$parametersParsed['records'][5]->__toArray()
+            $results[5]->__toArray()
         );
     }
 
     /** @noinspection PhpMethodNamingConventionInspection */
     public function testGenerateContentResultPagination()
     {
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'ResultsPage\event_page'
+        );
+
         self::assertEquals(
             [
                 'current' => 2,
                 'all' => 8,
                 'items' => 151,
             ],
-            self::$parametersParsed['pagination']
+            $parametersParsed['pagination']
+        );
+    }
+
+    public function testGenerateRounds()
+    {
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'ResultsPage\event_rounds_page'
+        );
+
+        /** @var array|Result[] $results */
+        $results = $parametersParsed['records'];
+
+        self::assertCount(20, $results);
+        self::assertInstanceOf(Result::class, $results[18]);
+        self::assertEquals(
+            [
+                'posGen' => '39',
+                'bib' => '108',
+                'fullName' => '#vanatoriidehiene',
+                'href' => null,
+                'time' => '1:53:39.6',
+                'category' => null,
+                'posCategory' => '39',
+                'gender' => null,
+                'posGender' => null,
+                'id' => 'semimaraton-gerar-2/individual/-e713f42c94/108/',
+                'parameters' => null,
+                'splits' => [
+                    [
+                        'name' => 'round1',
+                        'time' => '0:17:05.8',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                    [
+                        'name' => 'round2',
+                        'time' => '0:18:23.2',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                    [
+                        'name' => 'round3',
+                        'time' => '0:19:06.3',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                    [
+                        'name' => 'round4',
+                        'time' => '0:20:08.3',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                    [
+                        'name' => 'round5',
+                        'time' => '0:19:35.2',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                    [
+                        'name' => 'round6',
+                        'time' => '0:19:20.8',
+                        'timeFromStart' => null,
+                        'parameters' => null
+                    ],
+                ],
+                'status' => null,
+                'country' => 'Romania'
+            ],
+            $results[18]->__toArray()
         );
     }
 
     public function testGenerateContentAll()
     {
-        self::assertEquals(self::$parameters, self::$parametersParsed->all());
-    }
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'ResultsPage\event_page'
+        );
+        $parametersSerialized = static::getParametersFixtures('ResultsPage\event_page');
 
-    /**
-     * @inheritdoc
-     */
-    protected static function getNewScraper()
-    {
-        return new PageScraper();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function getNewParser()
-    {
-        return new PageParser();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function getSerializedFile()
-    {
-        return 'ResultsPage/event_page.serialized';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function getHtmlFile()
-    {
-        return 'ResultsPage/event_page.html';
+        self::assertEquals($parametersSerialized, $parametersParsed->all());
     }
 }

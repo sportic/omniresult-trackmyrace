@@ -6,6 +6,8 @@ use DOMElement;
 use Sportic\Omniresult\Common\Content\ListContent;
 use Sportic\Omniresult\Common\Models\Race;
 use Sportic\Omniresult\Common\Models\Result;
+use Sportic\Omniresult\Common\Models\Split;
+use Sportic\Omniresult\Common\Models\SplitCollection;
 use Sportic\Omniresult\Trackmyrace\Helper;
 
 /**
@@ -106,14 +108,23 @@ class ResultsPage extends AbstractParser
     {
         $class = $cell->getAttribute('class');
         $type = trim(str_replace(['first', 'last', 'odd', 'even'], '', $class));
+
+        if (strpos($type, ' round')) {
+            $this->parseRound($type, $cell, $parameters);
+            return $parameters;
+        }
+
         $field = array_search($type, self::getLabelMaps());
+
         if ($field) {
             $parameters[$field] = trim($cell->nodeValue);
-        } else {
-            if (!$this->parseCountry($cell, $parameters)) {
-                $this->parseResultName($cell, $parameters);
-            }
+            return $parameters;
         }
+
+        if (!$this->parseCountry($cell, $parameters)) {
+            $this->parseResultName($cell, $parameters);
+        }
+
         return $parameters;
     }
 
@@ -124,11 +135,11 @@ class ResultsPage extends AbstractParser
     protected function parseResultId(DOMElement $row)
     {
         $resultUrl = $row->getAttribute('rel');
-        $id = str_replace(
+        $resultId = str_replace(
             ['en/event-zone/ajax/event/'],
             '',
             $resultUrl);
-        return $id;
+        return $resultId;
     }
 
     /**
@@ -148,6 +159,21 @@ class ResultsPage extends AbstractParser
             }
             return true;
         }
+        return false;
+    }
+
+    /**
+     * @param string $round
+     * @param DOMElement $cell
+     * @param $parameters
+     * @return bool
+     */
+    protected function parseRound($round, $cell, &$parameters)
+    {
+        $roundName = trim(str_replace(' round', '', $round));
+        $parameters['splits'] = isset($parameters['splits']) ? $parameters['splits'] : new SplitCollection();
+
+        $parameters['splits'][] = new Split(['name' => $roundName, 'time' => trim($cell->nodeValue)]);
         return false;
     }
 
