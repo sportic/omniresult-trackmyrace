@@ -30,19 +30,35 @@ class EventPage extends AbstractParser
     protected function parseRaces()
     {
         $return = [];
-        $eventMenu = $this->getCrawler()->filter('#ctl00_Content_Main_pnlEventMenu');
+        $eventMenu = $this->getCrawler()->filter('table.courses');
         if ($eventMenu->count() > 0) {
-            $raceLinks = $eventMenu->filter('div.tab > a');
+            $raceLinks = $eventMenu->filter('td > a.tip');
             foreach ($raceLinks as $link) {
                 $parameters = [
                     'name' => $link->nodeValue,
                     'href' => $link->getAttribute('href')
                 ];
+                $parameters['id'] = $this->parseRaceIdFromHref($parameters['href']);
                 $return[] = new Race($parameters);
             }
         }
 
         return $return;
+    }
+
+    /**
+     * @param string $href
+     * @return string
+     */
+    protected function parseRaceIdFromHref($href)
+    {
+        $pos = strpos($href, '/results/');
+        if ($pos > 0) {
+            $raceId = substr($href, $pos + 9);
+            $raceId = str_replace('/', '', $raceId);
+            return $raceId;
+        }
+        return '';
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection

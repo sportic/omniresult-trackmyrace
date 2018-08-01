@@ -2,10 +2,9 @@
 
 namespace Sportic\Omniresult\Trackmyrace\Tests\Parsers;
 
-use Sportic\Omniresult\Common\Models\Result;
-use Sportic\Omniresult\Common\Models\SplitCollection;
-use Sportic\Omniresult\Trackmyrace\Scrapers\EventPage as EventPageScraper;
-use Sportic\Omniresult\Trackmyrace\Parsers\EventPage as EventPageParser;
+use Sportic\Omniresult\Common\Models\Race;
+use Sportic\Omniresult\Trackmyrace\Scrapers\EventPage as PageScraper;
+use Sportic\Omniresult\Trackmyrace\Parsers\EventPage as PageParser;
 
 /**
  * Class EventPageTest
@@ -15,38 +14,23 @@ class EventPageTest extends AbstractPageTest
 {
     public function testGenerateContentRaces()
     {
-        self::assertCount(5, self::$parametersParsed['records']);
-    }
+        $parametersParsed = static::initParserFromFixtures(
+            new PageParser(),
+            (new PageScraper()),
+            'EventPage\event_page'
+        );
 
-    /**
-     * @inheritdoc
-     */
-    protected static function getNewScraper()
-    {
-        return new EventPageScraper();
-    }
+        $records = $parametersParsed['records'];
 
-    /**
-     * @inheritdoc
-     */
-    protected static function getNewParser()
-    {
-        return new EventPageParser();
-    }
+        self::assertCount(3, $records);
 
-    /**
-     * @inheritdoc
-     */
-    protected static function getSerializedFile()
-    {
-        return 'event_page.serialized';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected static function getHtmlFile()
-    {
-        return 'event_page.html';
+        $firstRace = reset($records);
+        self::assertInstanceOf(Race::class, $firstRace);
+        self::assertSame([
+            'id' => '-bf626f0882',
+            'name' => 'Cozia',
+            'href' => 'en/running/event-zone/event/cozia-mountain-run-6/results/-bf626f0882/',
+            'parameters' => null
+        ], $firstRace->__toArray());
     }
 }

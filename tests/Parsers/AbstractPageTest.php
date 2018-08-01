@@ -2,20 +2,20 @@
 
 namespace Sportic\Omniresult\Trackmyrace\Tests\Parsers;
 
-use PHPUnit\Framework\TestCase;
 use Sportic\Omniresult\Common\Content\GenericContent;
 use Sportic\Omniresult\Common\Content\ListContent;
 use Sportic\Omniresult\Common\Content\RecordContent;
 use Sportic\Omniresult\Trackmyrace\Parsers\AbstractParser;
 use Sportic\Omniresult\Trackmyrace\Scrapers\AbstractScraper;
 use Sportic\Omniresult\Trackmyrace\Parsers\EventPage as EventPageParser;
+use Sportic\Omniresult\Trackmyrace\Tests\AbstractTest;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class AbstractPageTest
  * @package Sportic\Omniresult\Trackmyrace\Tests\Scrapers
  */
-abstract class AbstractPageTest extends TestCase
+abstract class AbstractPageTest extends AbstractTest
 {
     protected static $parameters;
 
