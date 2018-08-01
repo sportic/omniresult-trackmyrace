@@ -58,7 +58,7 @@ class ResultsPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'ResultsPage\event_page'
+            'ResultsPage/event_page'
         );
 
         self::assertEquals(
@@ -76,7 +76,7 @@ class ResultsPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'ResultsPage\event_rounds_page'
+            'ResultsPage/event_rounds_page'
         );
 
         /** @var array|Result[] $results */
@@ -147,9 +147,9 @@ class ResultsPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'ResultsPage\event_page'
+            'ResultsPage/event_page'
         );
-        $parametersSerialized = static::getParametersFixtures('ResultsPage\event_page');
+        $parametersSerialized = static::getParametersFixtures('ResultsPage/event_page');
 
         self::assertEquals($parametersSerialized, $parametersParsed->all());
     }
