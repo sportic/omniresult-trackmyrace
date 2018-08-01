@@ -17,7 +17,7 @@ class ResultPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'ResultPage\result_page'
+            'ResultPage/result_page'
         );
 
         $record = $parametersParsed->getRecord();

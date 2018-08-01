@@ -17,7 +17,7 @@ class EventPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'EventPage\event_page'
+            'EventPage/event_page'
         );
 
         $records = $parametersParsed['records'];

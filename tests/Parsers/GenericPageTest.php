@@ -17,7 +17,7 @@ class GenericPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'EventPage\event_page'
+            'EventPage/event_page'
         );
 
         self::assertInstanceOf(AbstractContent::class, $parametersParsed);

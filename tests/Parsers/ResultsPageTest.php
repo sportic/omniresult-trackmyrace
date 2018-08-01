@@ -23,7 +23,7 @@ class ResultsPageTest extends AbstractPageTest
         $parametersParsed = static::initParserFromFixtures(
             new PageParser(),
             (new PageScraper()),
-            'ResultsPage\event_page'
+            'ResultsPage/event_page'
         );
 
         /** @var array|Result[] $results */
