@@ -150,7 +150,7 @@ class ResultsPage extends AbstractParser
     protected function parseResultName($cell, &$parameters)
     {
         $spans = $cell->getElementsByTagName('span');
-        if ($spans->count() > 0) {
+        if ($spans->length > 0) {
             $firstSpan = $spans->item(0);
             $class = $firstSpan->getAttribute('class');
             $name = $firstSpan->getAttribute('title');
