@@ -185,7 +185,7 @@ class ResultsPage extends AbstractParser
     protected function parseCountry($cell, &$parameters)
     {
         $imageCountry = $cell->getElementsByTagName('img');
-        if ($imageCountry->count() > 0) {
+        if ($imageCountry->length > 0) {
             $image = $imageCountry->item(0);
             $src = $image->getAttribute('src');
             if (strpos($src, 'flags')) {
