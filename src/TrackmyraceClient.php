@@ -32,5 +32,4 @@ class TrackmyraceClient extends TimingClient
     {
         return $this->executeScrapper(ResultPage::class, $parameters);
     }
-
 }

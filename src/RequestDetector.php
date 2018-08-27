@@ -10,6 +10,7 @@ use Sportic\Omniresult\Common\RequestDetector\AbstractRequestDetector;
  */
 class RequestDetector extends AbstractRequestDetector
 {
+    protected $pathParts = null;
 
     /**
      * @inheritdoc
@@ -18,7 +19,7 @@ class RequestDetector extends AbstractRequestDetector
     {
         if (in_array(
             $this->getUrlComponent('host'),
-            ['cronometraj.racetecresults.com', 'racetecresults.com']
+            ['www.trackmyrace.com', 'trackmyrace.com']
         )) {
             return true;
         }
@@ -30,11 +31,15 @@ class RequestDetector extends AbstractRequestDetector
      */
     protected function detectAction()
     {
-        $path = strtolower($this->getUrlComponent('path'));
-        if ($path == '/results.aspx') {
+        $pathParts = $this->getPathParts();
+
+        if ($pathParts[1] != 'event-zone') {
+            return '';
+        }
+        if ($pathParts[4] == 'results') {
             return 'results';
         }
-        return '';
+        return 'event';
     }
 
     /**
@@ -42,18 +47,38 @@ class RequestDetector extends AbstractRequestDetector
      */
     protected function detectParams()
     {
-        parse_str($this->getUrlComponent('query'), $query);
+        $pathParts = $this->getPathParts();
 
         $return = [];
-
-        $params = ['CId', 'RId', 'EId'];
-        foreach ($params as $queryParam) {
-            if (isset($query[$queryParam])) {
-                $param = str_replace('i', 'I', strtolower($queryParam));
-                $return[$param] = $query[$queryParam];
-            }
-        }
+        $return['eventSlug'] = $pathParts[3];
+        $return['raceSlug'] = $pathParts[5];
 
         return $return;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPathParts(): array
+    {
+        if ($this->pathParts === null) {
+            $this->detectUrlPathParts();
+        }
+        return $this->pathParts;
+    }
+
+    protected function detectUrlPathParts()
+    {
+        $path = strtolower($this->getUrlComponent('path'));
+        $replacements = array_merge(
+            array_map(function ($a) {
+                return '/' . $a . '/';
+            }, Helper::getLanguages()),
+            array_map(function ($a) {
+                return '/' . $a . '/';
+            }, Helper::getRegions())
+        );
+        $path = trim(str_replace($replacements, '/', $path), '/');
+        $this->pathParts = explode('/', $path);
     }
 }
