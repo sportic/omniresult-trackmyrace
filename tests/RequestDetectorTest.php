@@ -49,6 +49,12 @@ class RequestDetectorTest extends AbstractTest
                 true,
                 'results',
                 ['eventSlug' => 'mtb-maraton-miercurea-ciuc', 'raceSlug' => '-293d130cc4']
+            ],
+            [
+            'https://www.trackmyrace.com/en/romania/running/event-zone/event/maximum-table/sportguru-timisoara-21k/results/-2374d438ea/expanded/',
+                true,
+                'results',
+                ['eventSlug' => 'sportguru-timisoara-21k', 'raceSlug' => '-2374d438ea']
             ]
         ];
     }

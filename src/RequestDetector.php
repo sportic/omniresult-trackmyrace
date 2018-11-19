@@ -76,7 +76,8 @@ class RequestDetector extends AbstractRequestDetector
             }, Helper::getLanguages()),
             array_map(function ($a) {
                 return '/' . $a . '/';
-            }, Helper::getRegions())
+            }, Helper::getRegions()),
+            ['/maximum-table/', '/expanded/']
         );
         $path = trim(str_replace($replacements, '/', $path), '/');
         $this->pathParts = explode('/', $path);
