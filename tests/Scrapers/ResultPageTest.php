@@ -41,7 +41,7 @@ class ResultPageTest extends TestCase
      */
     protected function getCrawler()
     {
-        $params = ['id' => 'cozia-mountain-run-6/individual/-bf626f0882/1281/'];
+        $params = ['uid' => 'cozia-mountain-run-6/individual/-bf626f0882/1281/'];
         $scraper = new ResultPage();
         $scraper->initialize($params);
         return $scraper->getCrawler();

@@ -18,15 +18,15 @@ class ResultPage extends AbstractScraper
      */
     protected function doCallValidation()
     {
-        $this->validate('id');
+        $this->validate('uid');
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getUid()
     {
-        return $this->getParameter('id');
+        return $this->getParameter('uid');
     }
 
     /**
@@ -50,6 +50,6 @@ class ResultPage extends AbstractScraper
     {
         return $this->getCrawlerUriHost()
             . '/en/event-zone/ajax/event/'
-            . $this->getId();
+            . $this->getUid();
     }
 }
