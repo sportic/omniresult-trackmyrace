@@ -145,7 +145,7 @@ class ResultsPage extends AbstractParser
     /**
      * @param DOMElement $cell
      * @param $parameters
-     * @return string
+     * @return bool
      */
     protected function parseResultName($cell, &$parameters)
     {
@@ -180,7 +180,7 @@ class ResultsPage extends AbstractParser
     /**
      * @param DOMElement $cell
      * @param $parameters
-     * @return string
+     * @return bool
      */
     protected function parseCountry($cell, &$parameters)
     {
