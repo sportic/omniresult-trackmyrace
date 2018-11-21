@@ -49,7 +49,6 @@ class ResultPage extends AbstractParser
         if ($field) {
             $this->returnContent[$field] = $value;
         }
-
     }
 
     /**
