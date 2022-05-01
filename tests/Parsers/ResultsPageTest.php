@@ -47,7 +47,11 @@ class ResultsPageTest extends AbstractPageTest
                 'splits' => [],
                 'status' => null,
                 'country' => 'Romania',
-                'club' => null
+                'club' => null,
+                'firstName' => 'Daniel',
+                'lastName' => 'Tabirca',
+                'timeGross' => null,
+                'notes' => null
             ],
             $results[5]->__toArray()
         );
@@ -64,9 +68,10 @@ class ResultsPageTest extends AbstractPageTest
 
         self::assertEquals(
             [
-                'current' => 2,
+                'current' => '2',
                 'all' => 8,
                 'items' => 151,
+                'nextUrl' => ''
             ],
             $parametersParsed['pagination']
         );
@@ -86,7 +91,7 @@ class ResultsPageTest extends AbstractPageTest
         self::assertCount(20, $results);
         self::assertInstanceOf(Result::class, $results[18]);
 
-        $params = require TEST_FIXTURE_PATH . DS . 'Parsers' . DS . 'ResultsPage'. DS . 'event_page.php';
+        $params = require TEST_FIXTURE_PATH . DS . 'Parsers' . DS . 'ResultsPage' . DS . 'event_page.php';
         self::assertEquals(
             $params,
             $results[18]->__toArray()

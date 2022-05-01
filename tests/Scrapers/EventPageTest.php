@@ -32,9 +32,9 @@ class EventPageTest extends TestCase
 
         $html =  $crawler->html();
 
-        static::assertContains('Cozia Mountain Run', $html);
-        static::assertContains('Cozia', $html);
-        static::assertContains('Stanisoara', $html);
+        static::assertStringContainsString('Cozia Mountain Run', $html);
+        static::assertStringContainsString('Cozia', $html);
+        static::assertStringContainsString('Stanisoara', $html);
 
 //        file_put_contents(TEST_FIXTURE_PATH . '/Parsers/EventPage/event_page.html', $crawler->html());
     }

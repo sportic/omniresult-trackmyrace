@@ -30,7 +30,7 @@ class ResultsPageTest extends TestCase
 
         static::assertInstanceOf(Crawler::class, $crawler);
 
-        static::assertContains('Constantin Mirica', $crawler->html());
+        static::assertStringContainsString('Constantin Mirica', $crawler->html());
 //        file_put_contents(TEST_FIXTURE_PATH . '/Parsers/ResultsPage/event_page.html', $crawler->html());
     }
 

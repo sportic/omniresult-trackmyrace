@@ -76,5 +76,9 @@ return [
     ],
     'status' => null,
     'country' => 'Romania',
-    'club' => null
+    'club' => null,
+    'firstName' => '',
+    'lastName' => '#vanatoriidehiene',
+    'timeGross' => null,
+    'notes' => null
 ];

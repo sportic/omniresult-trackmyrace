@@ -31,8 +31,8 @@ class ResultPageTest extends TestCase
         static::assertInstanceOf(Crawler::class, $crawler);
 
         $html =  $crawler->html();
-        static::assertContains('Cozia Mountain Run', $html);
-        static::assertContains('Florin Dragos Caprita', $html);
+        static::assertStringContainsString('Cozia Mountain Run', $html);
+        static::assertStringContainsString('Florin Dragos Caprita', $html);
 //        file_put_contents(TEST_FIXTURE_PATH . '/Parsers/ResultPage/result_page.html', $crawler->html());
     }
 
